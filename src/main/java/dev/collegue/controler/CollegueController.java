@@ -1,6 +1,7 @@
 package dev.collegue.controler;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,13 +16,13 @@ import dev.collegue.service.CollegueService;
 public class CollegueController {
 
 	@GetMapping
-    public List<Collegue> trouverCollegueParNom(@RequestParam("nom") String nomRecherche) {
+    public List<String> trouverCollegueParNom(@RequestParam("nom") String nomRecherche) {
 
         // La méthode retourne une liste d'objets Java
         // qui sera transformée automatiquement en JSON
 		CollegueService service = new CollegueService();
-		
-        return service.rechercherParNom(nomRecherche);
+			
+        return service.rechercherParNom(nomRecherche).stream().map(Collegue::getMatricule).collect(Collectors.toList());
     }
 	
 }
