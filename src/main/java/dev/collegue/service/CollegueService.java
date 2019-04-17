@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import dev.collegue.entite.Collegue;
+import dev.collegue.exception.CollegueNonTrouveException;
 
 public class CollegueService {
 
@@ -32,6 +33,23 @@ public class CollegueService {
         
 		return this.data.values().stream().filter(col -> col.getNom().equals(nomRecherche)).collect(Collectors.toList());
 		
+    }
+	
+	public Collegue rechercherParMatricule(String matriculeRecherche) {
+
+		Collegue collegue = null;
+		
+		if (data.get(matriculeRecherche) != null) {
+		
+			collegue = data.get(matriculeRecherche);
+	
+		} else {
+			
+			throw new CollegueNonTrouveException("Aucun collègue ne correspond au matricule renseigné");
+			
+		}
+		
+		return collegue;
     }
 
 }
