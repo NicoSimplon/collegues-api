@@ -1,5 +1,6 @@
 package dev.collegue.service;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,19 +16,41 @@ public class CollegueService {
 
 	public CollegueService() {
 		
-		this.sauvegardeCollegue(new Collegue(UUID.randomUUID().toString(), "Marty", "Nicolas", "31/03/1987", "img1.jpg"));
-		this.sauvegardeCollegue(new Collegue(UUID.randomUUID().toString(), "Paul", "Gurpratap", "18/12/1987", "img2.jpg"));
-		this.sauvegardeCollegue(new Collegue(UUID.randomUUID().toString(), "Macron", "Emmanuel", "31/03/1982", "img3.jpg"));
-		this.sauvegardeCollegue(new Collegue(UUID.randomUUID().toString(), "Phillipe", "Edouard", "31/03/1960", "img4.jpg"));
-		this.sauvegardeCollegue(new Collegue(UUID.randomUUID().toString(), "Sarkosy", "Nicolas", "31/03/1955", "img5.jpg"));
+		this.sauvegardeCollegue(new Collegue(UUID.randomUUID().toString(), "Marty", "Nicolas", LocalDate.of(1987, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "marty@societe.com"));
+		this.sauvegardeCollegue(new Collegue(UUID.randomUUID().toString(), "Paul", "Gurpratap", LocalDate.of(1987, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "paul@societe.com"));
+		this.sauvegardeCollegue(new Collegue(UUID.randomUUID().toString(), "Macron", "Emmanuel", LocalDate.of(1970, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "macron@societe.com"));
+		this.sauvegardeCollegue(new Collegue(UUID.randomUUID().toString(), "Phillipe", "Edouard", LocalDate.of(1960, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "phillipe@societe.com"));
+		this.sauvegardeCollegue(new Collegue(UUID.randomUUID().toString(), "Sarkosy", "Nicolas", LocalDate.of(1953, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "sarkosy@societe.com"));
 
 	}
 
-	public void sauvegardeCollegue(Collegue collegue) {
+	public void sauvegardeCollegue(Collegue collegue) throws CollegueInvalideException {
 		
-		this.data.put(collegue.getMatricule(), collegue);
-		
+		if (collegue.getNom().length() >= 2 &&
+				collegue.getPrenoms().length() >=2 &&
+				collegue.getEmail().contains("@") &&
+				collegue.getEmail().length() >= 3 &&
+				collegue.getPhotoUrl().contains("http") &&
+				(collegue.getDateDeNaissance().getYear() - LocalDate.now().getYear()) > 18) {
+			
+			this.data.put(collegue.getMatricule(), collegue);
+		}
+				
 	}
+	
+
+        // TODO Vérifier que le nom et les prenoms ont chacun au moins 2 caractères
+        // TODO Vérifier que l'email a au moins 3 caractères et contient `@`
+        // TODO Vérifier que la photoUrl commence bien par `http`
+        // TODO Vérifier que la date de naissance correspond à un age >= 18
+        // TODO Si une des règles ci-dessus n'est pas valide, générer une exception :
+        // `CollegueInvalideException`.
+
+
+        // TODO générer un matricule pour ce collègue (`UUID.randomUUID().toString()`)
+
+        // TODO Sauvegarder le collègue
+
 	
 	public List<Collegue> rechercherParNom(String nomRecherche) {
         
@@ -35,21 +58,10 @@ public class CollegueService {
 		
     }
 	
-	public Collegue rechercherParMatricule(String matriculeRecherche) {
+	public Collegue rechercherParMatricule(String matriculeRecherche) throws CollegueNonTrouveException {
 
-		Collegue collegue = null;
+		return data.get(matriculeRecherche);
 		
-		if (data.get(matriculeRecherche) != null) {
-		
-			collegue = data.get(matriculeRecherche);
-	
-		} else {
-			
-			throw new CollegueNonTrouveException("Aucun collègue ne correspond au matricule renseigné");
-			
-		}
-		
-		return collegue;
     }
 
 }

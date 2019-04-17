@@ -3,14 +3,17 @@ package dev.collegue.controler;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.collegue.entite.Collegue;
+import dev.collegue.exception.CollegueNonTrouveException;
 import dev.collegue.service.CollegueService;
 
 @RestController
@@ -37,11 +40,19 @@ public class CollegueController {
 	 * @param matriculeRecherche
 	 * @return Collegue
 	 */
-	@RequestMapping(value = "/{matriculeRecherche}", method = RequestMethod.GET)
-	public Collegue trouverCollegueParMatricule(@PathVariable String matriculeRecherche) {
+	@GetMapping(value = "/{matriculeRecherche}")
+	@ExceptionHandler(value = { CollegueNonTrouveException.class })
+	public ResponseEntity<Object> trouverCollegueParMatricule(@PathVariable String matriculeRecherche) {
 		
-		return service.rechercherParMatricule(matriculeRecherche);
+		Collegue collegueRecherche = service.rechercherParMatricule(matriculeRecherche);
 		
+		if (collegueRecherche != null) {
+			
+			return ResponseEntity.status(HttpStatus.OK).body(collegueRecherche);
+		
+		}
+		
+		return ResponseEntity.status(404).body("Collegue non trouvé");
 	}
 	
 }

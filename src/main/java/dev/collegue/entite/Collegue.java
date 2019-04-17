@@ -1,5 +1,7 @@
 package dev.collegue.entite;
 
+import java.time.LocalDate;
+
 public class Collegue {
 	
 	/**
@@ -20,12 +22,17 @@ public class Collegue {
 	/**
 	 * String Date de naissance du collègue
 	 */
-	private String dateDeNaissance;
+	private LocalDate dateDeNaissance;
 	
 	/**
 	 * String url de la photo du collègue
 	 */
 	private String photoUrl;
+	
+	/**
+	 * String email pro
+	 */
+	private String email;
 
 	/**
 	 * @param matricule
@@ -34,7 +41,7 @@ public class Collegue {
 	 * @param dateDeNaissance
 	 * @param photoUrl
 	 */
-	public Collegue(String matricule, String nom, String prenoms, String dateDeNaissance, String photoUrl) {
+	public Collegue(String matricule, String nom, String prenoms, LocalDate dateDeNaissance, String photoUrl, String email) {
 		this.matricule = matricule;
 		this.nom = nom;
 		this.prenoms = prenoms;
@@ -87,14 +94,14 @@ public class Collegue {
 	/**
 	 * @return the dateDeNaissance
 	 */
-	public String getDateDeNaissance() {
+	public LocalDate getDateDeNaissance() {
 		return dateDeNaissance;
 	}
 
 	/**
 	 * @param dateDeNaissance the dateDeNaissance to set
 	 */
-	public void setDateDeNaissance(String dateDeNaissance) {
+	public void setDateDeNaissance(LocalDate dateDeNaissance) {
 		this.dateDeNaissance = dateDeNaissance;
 	}
 
@@ -110,6 +117,20 @@ public class Collegue {
 	 */
 	public void setPhotoUrl(String photoUrl) {
 		this.photoUrl = photoUrl;
+	}
+
+	/**
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 }
