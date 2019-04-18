@@ -8,7 +8,13 @@
 		</encoder>
 	</appender>
 	<!-- loggerse -->
-	<logger name="dev.collegue" level="INFO" additivity="false">
+	<logger name="dev.collegue.service" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <logger name="dev.collegue.controller" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <logger name="dev.collegue" level="INFO" additivity="false">
         <appender-ref ref="STDOUT" />
     </logger>
 </configuration>

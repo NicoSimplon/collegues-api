@@ -34,6 +34,12 @@ public class Collegue {
 	 */
 	private String email;
 
+	public Collegue() {
+		/**
+		 * Constructeur par défaut
+		 */
+	}
+	
 	/**
 	 * @param matricule
 	 * @param nom
@@ -41,12 +47,12 @@ public class Collegue {
 	 * @param dateDeNaissance
 	 * @param photoUrl
 	 */
-	public Collegue(String matricule, String nom, String prenoms, LocalDate dateDeNaissance, String photoUrl, String email) {
-		this.matricule = matricule;
+	public Collegue(String nom, String prenoms, LocalDate dateDeNaissance, String photoUrl, String email) {
 		this.nom = nom;
 		this.prenoms = prenoms;
 		this.dateDeNaissance = dateDeNaissance;
 		this.photoUrl = photoUrl;
+		this.email = email;
 	}
 
 	/**

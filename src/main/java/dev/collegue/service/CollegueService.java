@@ -1,6 +1,7 @@
 package dev.collegue.service;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import dev.collegue.entite.Collegue;
+import dev.collegue.exception.CollegueInvalideException;
 import dev.collegue.exception.CollegueNonTrouveException;
 
 public class CollegueService {
@@ -16,40 +18,42 @@ public class CollegueService {
 
 	public CollegueService() {
 		
-		this.sauvegardeCollegue(new Collegue(UUID.randomUUID().toString(), "Marty", "Nicolas", LocalDate.of(1987, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "marty@societe.com"));
-		this.sauvegardeCollegue(new Collegue(UUID.randomUUID().toString(), "Paul", "Gurpratap", LocalDate.of(1987, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "paul@societe.com"));
-		this.sauvegardeCollegue(new Collegue(UUID.randomUUID().toString(), "Macron", "Emmanuel", LocalDate.of(1970, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "macron@societe.com"));
-		this.sauvegardeCollegue(new Collegue(UUID.randomUUID().toString(), "Phillipe", "Edouard", LocalDate.of(1960, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "phillipe@societe.com"));
-		this.sauvegardeCollegue(new Collegue(UUID.randomUUID().toString(), "Sarkosy", "Nicolas", LocalDate.of(1953, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "sarkosy@societe.com"));
+		this.sauvegardeCollegue(new Collegue("Marty", "Nicolas", LocalDate.of(1987, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "marty@societe.com"));
+		this.sauvegardeCollegue(new Collegue("Paul", "Gurpratap", LocalDate.of(1987, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "paul@societe.com"));
+		this.sauvegardeCollegue(new Collegue("Macron", "Emmanuel", LocalDate.of(1970, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "macron@societe.com"));
+		this.sauvegardeCollegue(new Collegue("Phillipe", "Edouard", LocalDate.of(1960, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "phillipe@societe.com"));
+		this.sauvegardeCollegue(new Collegue("Sarkosy", "Nicolas", LocalDate.of(1953, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "sarkosy@societe.com"));
 
 	}
 
-	public void sauvegardeCollegue(Collegue collegue) throws CollegueInvalideException {
+	public void sauvegardeCollegue(Collegue collegue) {
 		
-		if (collegue.getNom().length() >= 2 &&
-				collegue.getPrenoms().length() >=2 &&
-				collegue.getEmail().contains("@") &&
-				collegue.getEmail().length() >= 3 &&
-				collegue.getPhotoUrl().contains("http") &&
-				(collegue.getDateDeNaissance().getYear() - LocalDate.now().getYear()) > 18) {
+		if (collegue.getNom().length() < 2)
+			throw new CollegueInvalideException("Le nom doit comporter au moins deux caractères");
+		
+		if (collegue.getPrenoms().length() < 2)
+			throw new CollegueInvalideException("Le prénom doit comporter au moins deux caractères");
+		
+		if (! collegue.getEmail().contains("@"))
+			throw new CollegueInvalideException("L'adresse mail est mal formée, elle doit être de la forme suivante: exemple@exemple.com");
+		
+		if (collegue.getEmail().length() < 3)
+			throw new CollegueInvalideException("L'email doit comporter au moins trois caractères");
+		
+		if (! collegue.getPhotoUrl().startsWith("http"))
+			throw new CollegueInvalideException("L'URL de la photo doit commencer par http");
+		
+		Period period = Period.between(collegue.getDateDeNaissance(), LocalDate.now());
+		
+		if (period.getYears() < 18)
+			throw new CollegueInvalideException("Une nouveau collègue doit avoir 18 ans au moins");
 			
-			this.data.put(collegue.getMatricule(), collegue);
-		}
+		collegue.setMatricule(UUID.randomUUID().toString());
+			
+		this.data.put(collegue.getMatricule(), collegue);
+
 				
 	}
-	
-
-        // TODO Vérifier que le nom et les prenoms ont chacun au moins 2 caractères
-        // TODO Vérifier que l'email a au moins 3 caractères et contient `@`
-        // TODO Vérifier que la photoUrl commence bien par `http`
-        // TODO Vérifier que la date de naissance correspond à un age >= 18
-        // TODO Si une des règles ci-dessus n'est pas valide, générer une exception :
-        // `CollegueInvalideException`.
-
-
-        // TODO générer un matricule pour ce collègue (`UUID.randomUUID().toString()`)
-
-        // TODO Sauvegarder le collègue
 
 	
 	public List<Collegue> rechercherParNom(String nomRecherche) {
@@ -58,9 +62,19 @@ public class CollegueService {
 		
     }
 	
-	public Collegue rechercherParMatricule(String matriculeRecherche) throws CollegueNonTrouveException {
+	public Collegue rechercherParMatricule(String matriculeRecherche) {
 
-		return data.get(matriculeRecherche);
+		Collegue matricule = data.get(matriculeRecherche);
+		
+		if (matricule != null) {
+			
+			return matricule;
+			
+		} else {
+			
+			throw new CollegueNonTrouveException("Le matricule renseigné est inconnu");
+			
+		}
 		
     }
 
