@@ -40,10 +40,8 @@ public class CollegueController {
 	 */
 	@GetMapping(value = "/{matriculeRecherche}")
 	public Collegue trouverCollegueParMatricule(@PathVariable String matriculeRecherche) {
-		
-		Collegue collegueRecherche = service.rechercherParMatricule(matriculeRecherche);
 
-		return collegueRecherche;
+		return service.rechercherParMatricule(matriculeRecherche);
 	
 	}
 	
