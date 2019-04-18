@@ -27,7 +27,6 @@ public class CollegueServiceTest {
 		
 		LOG.info("Etant donné un nouvel objet Collegue initié avec un nom d'un seul caractère");
 		Collegue collegue = new Collegue("m", "Nicolas", LocalDate.of(1987, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "marty@societe.com");
-		collegue.setMatricule(UUID.randomUUID().toString());
 		
 		LOG.info("Lorsqu'on sauvegarde ce collègue");
 		LOG.info("Alors une exception de type CollegueInvalidException est lancée");
@@ -40,7 +39,6 @@ public class CollegueServiceTest {
 		
 		LOG.info("Etant donné un nouvel objet Collegue initié avec un prénom d'un seul caractère");
 		Collegue collegue = new Collegue("Marty", "n", LocalDate.of(1987, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "marty@societe.com");
-		collegue.setMatricule(UUID.randomUUID().toString());
 		
 		LOG.info("Lorsqu'on sauvegarde ce collègue");
 		LOG.info("Alors une exception de type CollegueInvalidException est lancée");
@@ -53,7 +51,6 @@ public class CollegueServiceTest {
 		
 		LOG.info("Etant donné un nouvel objet Collegue initié avec un email ne contenant pas d'@");
 		Collegue collegue = new Collegue("Marty", "Nicolas", LocalDate.of(1987, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "marty.societe.com");
-		collegue.setMatricule(UUID.randomUUID().toString());
 		
 		LOG.info("Lorsqu'on sauvegarde ce collègue");
 		LOG.info("Alors une exception de type CollegueInvalidException est lancée");
@@ -66,7 +63,6 @@ public class CollegueServiceTest {
 		
 		LOG.info("Etant donné un nouvel objet Collegue initié avec un email d'un seul caractère");
 		Collegue collegue = new Collegue("Marty", "Nicolas", LocalDate.of(1987, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "@");
-		collegue.setMatricule(UUID.randomUUID().toString());
 		
 		LOG.info("Lorsqu'on sauvegarde ce collègue");
 		LOG.info("Alors une exception de type CollegueInvalidException est lancée");
@@ -77,9 +73,8 @@ public class CollegueServiceTest {
 	@Test(expected = CollegueInvalideException.class)
 	public void testSauvegarderCollegueWithInvalidImgUrl() {
 		
-		LOG.info("Etant donné un nouvel objet Collegue initié avec une unrl d'image ne contenant pas http");
+		LOG.info("Etant donné un nouvel objet Collegue initié avec une url d'image ne contenant pas http");
 		Collegue collegue = new Collegue("Marty", "Nicolas", LocalDate.of(1987, 3, 31), "s://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "marty@societe.com");
-		collegue.setMatricule(UUID.randomUUID().toString());
 		
 		LOG.info("Lorsqu'on sauvegarde ce collègue");
 		LOG.info("Alors une exception de type CollegueInvalidException est lancée");
@@ -92,11 +87,55 @@ public class CollegueServiceTest {
 		
 		LOG.info("Etant donné un nouvel objet Collegue initié avec un age inférieur à 18 ans");
 		Collegue collegue = new Collegue("Marty", "Nicolas", LocalDate.of(2018, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "marty@societe.com");
-		collegue.setMatricule(UUID.randomUUID().toString());
 		
 		LOG.info("Lorsqu'on sauvegarde ce collègue");
 		LOG.info("Alors une exception de type CollegueInvalidException est lancée");
 		service.sauvegardeCollegue(collegue);
+		
+	}
+	
+	@Test(expected = CollegueInvalideException.class)
+	public void testModifierCollegueWithInvalidEmail() {
+		
+		LOG.info("Etant donné un nouvel objet Collegue initié et sauvegardé");
+		Collegue collegue = new Collegue("Marty", "Nicolas", LocalDate.of(1987, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "marty@societe.com");
+		collegue.setMatricule(UUID.randomUUID().toString());
+		
+		service.sauvegardeCollegue(collegue);
+		
+		LOG.info("Lorsqu'on modifie ce collègue avec un email ne contenant pas d'@");
+		LOG.info("Alors une exception de type CollegueInvalidException est lancée");
+		service.modifierEmail(collegue.getMatricule(), "marty.nicolas");
+		
+	}
+	
+	@Test(expected = CollegueInvalideException.class)
+	public void testModifierCollegueWithShorterEmail() {
+		
+		LOG.info("Etant donné un nouvel objet Collegue initié et sauvegardé");
+		Collegue collegue = new Collegue("Marty", "Nicolas", LocalDate.of(1987, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "nico@mail.fr");
+		collegue.setMatricule(UUID.randomUUID().toString());
+		
+		service.sauvegardeCollegue(collegue);
+		
+		LOG.info("Lorsqu'on modifie ce collègue avec avec un email d'un seul caractère");
+		LOG.info("Alors une exception de type CollegueInvalidException est lancée");
+		service.modifierEmail(collegue.getMatricule(), "@");
+		
+	}
+	
+	@Test(expected = CollegueInvalideException.class)
+	public void testModifierCollegueWithInvalidImgUrl() {
+		
+		LOG.info("Etant donné un nouvel objet Collegue initié et sauvegardé");
+		Collegue collegue = new Collegue("Marty", "Nicolas", LocalDate.of(1987, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "marty@societe.com");
+		collegue.setMatricule(UUID.randomUUID().toString());
+		
+		service.sauvegardeCollegue(collegue);
+		
+		LOG.info("Lorsqu'on sauvegarde ce collègue avec une url d'image ne contenant pas http");
+		LOG.info("Alors une exception de type CollegueInvalidException est lancée");
+		service.modifierPhotoUrl(collegue.getMatricule(), "ttp://www.img.com");
 		
 	}
 	
