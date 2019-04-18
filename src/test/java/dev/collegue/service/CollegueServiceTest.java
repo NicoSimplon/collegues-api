@@ -3,24 +3,25 @@ package dev.collegue.service;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import dev.collegue.entite.Collegue;
 import dev.collegue.exception.CollegueInvalideException;
 
+@RunWith(SpringRunner.class )
+@SpringBootTest
 public class CollegueServiceTest {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(CollegueService.class);
 	
+	@Autowired
 	private CollegueService service;
-	
-	@Before
-	public void init() {
-		this.service = new CollegueService();
-	}
 
 	@Test(expected = CollegueInvalideException.class)
 	public void testSauvegarderCollegueWithShorterNom() {
