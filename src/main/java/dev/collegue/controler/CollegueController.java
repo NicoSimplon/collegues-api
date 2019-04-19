@@ -65,6 +65,13 @@ public class CollegueController {
 
 	}
 	
+	/**
+	 * Retourne un objet collègue après l'avoir modifié
+	 * 
+	 * @param matricule
+	 * @param fieldContainer
+	 * @return
+	 */
 	@PatchMapping(value = "/{matricule}")
 	public ResponseEntity<Object> modifierCollegue(@PathVariable String matricule, @RequestBody CollegueModifie fieldContainer) {
 		

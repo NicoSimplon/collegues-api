@@ -2,36 +2,50 @@ package dev.collegue.entite;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="collegue")
 public class Collegue {
 	
 	/**
 	 * String matricule identifiant le collègue
 	 */
+	@Id
+	@Column(name="matricule")
 	private String matricule;
 	
 	/**
 	 * String Nom du collègue
 	 */
+	@Column
 	private String nom;
 	
 	/**
 	 * String Prénom du collègue
 	 */
+	@Column
 	private String prenoms;
 	
 	/**
 	 * String Date de naissance du collègue
 	 */
+	@Column
 	private LocalDate dateDeNaissance;
 	
 	/**
 	 * String url de la photo du collègue
 	 */
+	@Column
 	private String photoUrl;
 	
 	/**
 	 * String email pro
 	 */
+	@Column
 	private String email;
 
 	public Collegue() {

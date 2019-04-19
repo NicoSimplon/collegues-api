@@ -9,6 +9,10 @@ public class CollegueNonTrouveException extends RuntimeException {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(CollegueNonTrouveException.class);
 	
+	public CollegueNonTrouveException() {
+		
+	}
+	
 	public CollegueNonTrouveException(String msg) {
 		
 		LOGGER.error(msg);

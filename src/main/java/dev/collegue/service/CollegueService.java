@@ -2,40 +2,22 @@ package dev.collegue.service;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import dev.collegue.dao.CollegueRepository;
 import dev.collegue.entite.Collegue;
 import dev.collegue.exception.CollegueInvalideException;
 import dev.collegue.exception.CollegueNonTrouveException;
 
 @Service
 public class CollegueService {
-
-	private Map<String, Collegue> data = new HashMap<>();
-
-	public CollegueService() {
-
-		this.sauvegardeCollegue(new Collegue("Marty", "Nicolas", LocalDate.of(1987, 3, 31),
-				"https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "marty@societe.com"));
-		this.sauvegardeCollegue(new Collegue("Paul", "Gurpratap", LocalDate.of(1987, 3, 31),
-				"https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "paul@societe.com"));
-		this.sauvegardeCollegue(new Collegue("Macron", "Emmanuel", LocalDate.of(1970, 3, 31),
-				"https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg",
-				"macron@societe.com"));
-		this.sauvegardeCollegue(new Collegue("Phillipe", "Edouard", LocalDate.of(1960, 3, 31),
-				"https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg",
-				"phillipe@societe.com"));
-		this.sauvegardeCollegue(new Collegue("Sarkosy", "Nicolas", LocalDate.of(1953, 3, 31),
-				"https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg",
-				"sarkosy@societe.com"));
-
-	}
+	
+	@Autowired CollegueRepository colRepo;
 
 	public Collegue sauvegardeCollegue(Collegue collegue) {
 
@@ -62,7 +44,7 @@ public class CollegueService {
 
 		collegue.setMatricule(UUID.randomUUID().toString());
 
-		this.data.put(collegue.getMatricule(), collegue);
+		colRepo.save(collegue);
 
 		return collegue;
 
@@ -80,7 +62,7 @@ public class CollegueService {
 			throw new CollegueInvalideException("L'email doit comporter au moins trois caractères");
 
 		collegueRecherche.setEmail(email);
-		data.get(matricule).setEmail(email);
+		colRepo.getOne(matricule).setEmail(email);
 
 		return collegueRecherche;
 	}
@@ -93,35 +75,32 @@ public class CollegueService {
 			throw new CollegueInvalideException("L'URL de la photo doit commencer par http");
 		
 		collegueRecherche.setPhotoUrl(photoUrl);
-		data.get(matricule).setPhotoUrl(photoUrl);
+		colRepo.save(collegueRecherche);
 
 		return collegueRecherche;
 	}
 
 	public List<Collegue> rechercherParNom(String nomRecherche) {
-
-		List<Collegue> list = this.data.values().stream().filter(col -> col.getNom().equals(nomRecherche))
-				.collect(Collectors.toList());
-
-		if (list.get(0) instanceof Collegue) {
-
-			return list;
-
+		
+		if (!colRepo.findDistinctPeopleByNom(nomRecherche).isEmpty()) {
+			
+			return colRepo.findDistinctPeopleByNom(nomRecherche);
+			
 		} else {
-
-			throw new CollegueNonTrouveException("Le nom renseigné est inconnu");
-
+			
+			throw new CollegueNonTrouveException("Le nom renseigné est inconnu");			
+			
 		}
 
 	}
 
 	public Collegue rechercherParMatricule(String matriculeRecherche) {
 
-		Collegue collegueRecherche = data.get(matriculeRecherche);
+		Optional<Collegue> collegueRecherche = colRepo.findById(matriculeRecherche);
 
-		if (collegueRecherche != null) {
+		if (collegueRecherche.isPresent()) {
 
-			return collegueRecherche;
+			return collegueRecherche.get();
 
 		} else {
 
