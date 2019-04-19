@@ -62,7 +62,7 @@ public class CollegueService {
 			throw new CollegueInvalideException("L'email doit comporter au moins trois caractères");
 
 		collegueRecherche.setEmail(email);
-		colRepo.getOne(matricule).setEmail(email);
+		colRepo.save(collegueRecherche);
 
 		return collegueRecherche;
 	}
