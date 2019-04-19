@@ -35,17 +35,18 @@ Dans le body de la requête un objet JSON doit être envoyé avec le format suiv
 
 ### Modification d'un email et/ou de l'url de la photo du collègue via une requête de type PATCH
 
-```
 Utilisation de l'url suivante: href="https://nicolas-collegues-api.herokuapp.com/collegues/XXX
 
 Dans le body de la requête un objet JSON doit être envoyé avec le format suivant:
+```
 
 {
     "email": "mail@mail.com",
     "photoUrl": "http://image.jpg"
 }
 
+
+```
 Vous pouvez ne modifier qu'un seul de ces éléments ou les deux mais dans ce dernier cas,
 veillez à repecter l'ordre présenté ci-desus.
 
-```
