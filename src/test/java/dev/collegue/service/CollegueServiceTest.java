@@ -26,13 +26,13 @@ public class CollegueServiceTest {
 	
 	private CollegueService service;
 	
-	private CollegueRepository cr;
+	private CollegueRepository crMock;
 	
 	@Before
 	public void init() {
 		this.service = new CollegueService();
-		this.cr = Mockito.mock(CollegueRepository.class);
-		this.service.setColRepo(this.cr);
+		this.crMock = Mockito.mock(CollegueRepository.class);
+		this.service.setColRepo(this.crMock);
 	}
 
 	@Test(expected = CollegueInvalideException.class)
@@ -110,14 +110,14 @@ public class CollegueServiceTest {
 	@Test(expected = CollegueInvalideException.class)
 	public void testModifierCollegueWithInvalidEmail() {
 		
-		LOG.info("Etant donné un nouvel objet Collegue initié et sauvegardé");
+		LOG.info("Etant donné un nouvel objet Collegue initié");
 		Collegue collegue = new Collegue("Marty", "Nicolas", LocalDate.of(1987, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "marty@societe.com");
 		String matricule = UUID.randomUUID().toString();
 		collegue.setMatricule(matricule);
 		
 		LOG.info("Lorsqu'on modifie ce collègue avec un email ne contenant pas d'@");
 		LOG.info("Alors une exception de type CollegueInvalidException est lancée");
-		Mockito.when(this.cr.findById(matricule)).thenReturn(Optional.of(collegue));
+		Mockito.when(this.crMock.findById(matricule)).thenReturn(Optional.of(collegue));
 		service.modifierEmail(collegue.getMatricule(), "marty.nicolas");
 		
 	}
@@ -125,14 +125,14 @@ public class CollegueServiceTest {
 	@Test(expected = CollegueInvalideException.class)
 	public void testModifierCollegueWithShorterEmail() {
 		
-		LOG.info("Etant donné un nouvel objet Collegue initié et sauvegardé");
+		LOG.info("Etant donné un nouvel objet Collegue initié");
 		Collegue collegue = new Collegue("Marty", "Nicolas", LocalDate.of(1987, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "nico@mail.fr");
 		String matricule = UUID.randomUUID().toString();
 		collegue.setMatricule(matricule);
 		
 		LOG.info("Lorsqu'on modifie ce collègue avec avec un email d'un seul caractère");
 		LOG.info("Alors une exception de type CollegueInvalidException est lancée");
-		Mockito.when(this.cr.findById(matricule)).thenReturn(Optional.of(collegue));
+		Mockito.when(this.crMock.findById(matricule)).thenReturn(Optional.of(collegue));
 		service.modifierEmail(collegue.getMatricule(), "@");
 		
 	}
@@ -140,14 +140,14 @@ public class CollegueServiceTest {
 	@Test(expected = CollegueInvalideException.class)
 	public void testModifierCollegueWithInvalidImgUrl() {
 		
-		LOG.info("Etant donné un nouvel objet Collegue initié et sauvegardé");
+		LOG.info("Etant donné un nouvel objet Collegue initié");
 		Collegue collegue = new Collegue("Marty", "Nicolas", LocalDate.of(1987, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "marty@societe.com");
 		String matricule = UUID.randomUUID().toString();
 		collegue.setMatricule(matricule);
 		
 		LOG.info("Lorsqu'on sauvegarde ce collègue avec une url d'image ne contenant pas http");
 		LOG.info("Alors une exception de type CollegueInvalidException est lancée");
-		Mockito.when(this.cr.findById(matricule)).thenReturn(Optional.of(collegue));
+		Mockito.when(this.crMock.findById(matricule)).thenReturn(Optional.of(collegue));
 		service.modifierPhotoUrl(matricule, "ttp://www.img.com");
 		
 	}
