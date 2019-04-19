@@ -26,7 +26,7 @@ Dans le body de la requête un objet JSON doit être envoyé avec le format suiv
 {
     "nom": "Mermoz",
     "prenoms": "Jules",
-    "dateDeNaissance": "1987-03-31",
+    "dateDeNaissance": "1950-10-15",
     "photoUrl": "http://image.jpg",
     "email": "mail@mail.com"
 }
