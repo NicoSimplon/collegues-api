@@ -3,7 +3,6 @@ package dev.collegue.service;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +15,25 @@ import dev.collegue.exception.CollegueInvalideException;
 import dev.collegue.exception.CollegueNonTrouveException;
 
 /**
- * Couche service de l'application, c'est ici que le CRUD vers la base de données est appelée
+ * Couche service de l'application, c'est ici que le CRUD vers la base de
+ * données est appelée
  * 
  * @author Nicolas
  *
  */
 @Service
 public class CollegueService {
-	
-	@Autowired CollegueRepository colRepo;
+
+	@Autowired
+	CollegueRepository colRepo;
+
+	/**
+	 * @param colRepo the repository to set
+	 *            
+	 */
+	public void setColRepo(CollegueRepository colRepo) {
+		this.colRepo = colRepo;
+	}
 
 	/**
 	 * Ajoute un nouveau collègue dans la base de données puis le retourne
@@ -78,7 +87,7 @@ public class CollegueService {
 		if (!email.contains("@"))
 			throw new CollegueInvalideException(
 					"L'adresse mail est mal formée, elle doit être de la forme suivante: exemple@exemple.com");
-		
+
 		if (email.length() < 3)
 			throw new CollegueInvalideException("L'email doit comporter au moins trois caractères");
 
@@ -100,50 +109,43 @@ public class CollegueService {
 
 		if (!photoUrl.startsWith("http"))
 			throw new CollegueInvalideException("L'URL de la photo doit commencer par http");
-		
+
 		collegueRecherche.setPhotoUrl(photoUrl);
 		return collegueRecherche;
 	}
 
 	/**
-	 * Recherche un ou plusieurs collègues dans la base de données via un nom de famille
+	 * Recherche un ou plusieurs collègues dans la base de données via un nom de
+	 * famille
 	 * 
 	 * @param nomRecherche
 	 * @return List<Collegue>
 	 */
 	public List<Collegue> rechercherParNom(String nomRecherche) {
-		
+
 		if (!colRepo.findDistinctPeopleByNom(nomRecherche).isEmpty()) {
-			
+
 			return colRepo.findDistinctPeopleByNom(nomRecherche);
-			
+
 		} else {
-			
-			throw new CollegueNonTrouveException("Le nom renseigné est inconnu");			
-			
+
+			throw new CollegueNonTrouveException("Le nom renseigné est inconnu");
+
 		}
 
 	}
 
 	/**
-	 * Recherche un collègue dans la base de données via son matricule et le retourne
+	 * Recherche un collègue dans la base de données via son matricule et le
+	 * retourne
 	 * 
 	 * @param matriculeRecherche
 	 * @return Collegue
 	 */
 	public Collegue rechercherParMatricule(String matriculeRecherche) {
 
-		Optional<Collegue> collegueRecherche = colRepo.findById(matriculeRecherche);
+		return colRepo.findById(matriculeRecherche).orElseThrow(CollegueNonTrouveException::new);
 
-		if (collegueRecherche.isPresent()) {
-
-			return collegueRecherche.get();
-
-		} else {
-
-			throw new CollegueNonTrouveException("Le matricule renseigné est inconnu");
-
-		}
 
 	}
 

@@ -1,27 +1,39 @@
 package dev.collegue.service;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.UUID;
 
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
+import dev.collegue.dao.CollegueRepository;
 import dev.collegue.entite.Collegue;
 import dev.collegue.exception.CollegueInvalideException;
 
-@RunWith(SpringRunner.class )
-@SpringBootTest
+/**
+ * Classe de test de la couche service
+ * 
+ * @author Nicolas
+ *
+ */
 public class CollegueServiceTest {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(CollegueService.class);
 	
-	@Autowired
 	private CollegueService service;
+	
+	private CollegueRepository cr;
+	
+	@Before
+	public void init() {
+		this.service = new CollegueService();
+		this.cr = Mockito.mock(CollegueRepository.class);
+		this.service.setColRepo(this.cr);
+	}
 
 	@Test(expected = CollegueInvalideException.class)
 	public void testSauvegarderCollegueWithShorterNom() {
@@ -94,18 +106,18 @@ public class CollegueServiceTest {
 		service.sauvegardeCollegue(collegue);
 		
 	}
-	
+
 	@Test(expected = CollegueInvalideException.class)
 	public void testModifierCollegueWithInvalidEmail() {
 		
 		LOG.info("Etant donné un nouvel objet Collegue initié et sauvegardé");
 		Collegue collegue = new Collegue("Marty", "Nicolas", LocalDate.of(1987, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "marty@societe.com");
-		collegue.setMatricule(UUID.randomUUID().toString());
-		
-		service.sauvegardeCollegue(collegue);
+		String matricule = UUID.randomUUID().toString();
+		collegue.setMatricule(matricule);
 		
 		LOG.info("Lorsqu'on modifie ce collègue avec un email ne contenant pas d'@");
 		LOG.info("Alors une exception de type CollegueInvalidException est lancée");
+		Mockito.when(this.cr.findById(matricule)).thenReturn(Optional.of(collegue));
 		service.modifierEmail(collegue.getMatricule(), "marty.nicolas");
 		
 	}
@@ -115,12 +127,12 @@ public class CollegueServiceTest {
 		
 		LOG.info("Etant donné un nouvel objet Collegue initié et sauvegardé");
 		Collegue collegue = new Collegue("Marty", "Nicolas", LocalDate.of(1987, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "nico@mail.fr");
-		collegue.setMatricule(UUID.randomUUID().toString());
-		
-		service.sauvegardeCollegue(collegue);
+		String matricule = UUID.randomUUID().toString();
+		collegue.setMatricule(matricule);
 		
 		LOG.info("Lorsqu'on modifie ce collègue avec avec un email d'un seul caractère");
 		LOG.info("Alors une exception de type CollegueInvalidException est lancée");
+		Mockito.when(this.cr.findById(matricule)).thenReturn(Optional.of(collegue));
 		service.modifierEmail(collegue.getMatricule(), "@");
 		
 	}
@@ -130,13 +142,13 @@ public class CollegueServiceTest {
 		
 		LOG.info("Etant donné un nouvel objet Collegue initié et sauvegardé");
 		Collegue collegue = new Collegue("Marty", "Nicolas", LocalDate.of(1987, 3, 31), "https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "marty@societe.com");
-		collegue.setMatricule(UUID.randomUUID().toString());
-		
-		service.sauvegardeCollegue(collegue);
+		String matricule = UUID.randomUUID().toString();
+		collegue.setMatricule(matricule);
 		
 		LOG.info("Lorsqu'on sauvegarde ce collègue avec une url d'image ne contenant pas http");
 		LOG.info("Alors une exception de type CollegueInvalidException est lancée");
-		service.modifierPhotoUrl(collegue.getMatricule(), "ttp://www.img.com");
+		Mockito.when(this.cr.findById(matricule)).thenReturn(Optional.of(collegue));
+		service.modifierPhotoUrl(matricule, "ttp://www.img.com");
 		
 	}
 	
