@@ -19,6 +19,12 @@ import dev.collegue.entite.Collegue;
 import dev.collegue.entite.CollegueModifie;
 import dev.collegue.service.CollegueService;
 
+/**
+ * Couche Controller de l'application, c'est ici que sont gérées les requêtes et réponses HTTP
+ * 
+ * @author Nicolas
+ *
+ */
 @RestController
 @RequestMapping("/collegues")
 public class CollegueController {

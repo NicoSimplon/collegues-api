@@ -8,6 +8,12 @@ import org.springframework.data.repository.query.Param;
 
 import dev.collegue.entite.Collegue;
 
+/**
+ * Repository mettant à disposition un CRUD basique avec JPA, plus les méthodes suivantes
+ * 
+ * @author Nicolas
+ *
+ */
 public interface CollegueRepository extends JpaRepository<Collegue, String> {
 	
 	 @Query("select distinct c from Collegue c where c.nom = :nom")

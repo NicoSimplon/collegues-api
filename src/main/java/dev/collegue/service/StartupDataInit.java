@@ -9,6 +9,12 @@ import org.springframework.stereotype.Component;
 
 import dev.collegue.entite.Collegue;
 
+/**
+ * Données initialisées au démarrage de l'application
+ * 
+ * @author Nicolas
+ *
+ */
 @Component
 public class StartupDataInit {
 
