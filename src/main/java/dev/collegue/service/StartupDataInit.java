@@ -26,6 +26,8 @@ public class StartupDataInit {
 
     	service.sauvegardeCollegue(new Collegue("Marty", "Nicolas", LocalDate.of(1987, 3, 31),
 				"https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "marty@societe.com"));
+    	service.sauvegardeCollegue(new Collegue("Marty", "Pascal", LocalDate.of(1990, 4, 8),
+				"https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "marty2@societe.com"));
     	service.sauvegardeCollegue(new Collegue("Paul", "Gurpratap", LocalDate.of(1987, 3, 31),
 				"https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "paul@societe.com"));
     	service.sauvegardeCollegue(new Collegue("Macron", "Emmanuel", LocalDate.of(1970, 3, 31),
