@@ -18,10 +18,4 @@ public class CollegueInvalideException extends RuntimeException {
 
 	}
 
-	public CollegueInvalideException(Exception e) {
-
-		LOGGER.error(e.getMessage());
-
-	}
-
 }

@@ -18,11 +18,5 @@ public class CollegueNonTrouveException extends RuntimeException {
 		LOGGER.error(msg);
 		
 	}
-	
-	public CollegueNonTrouveException(Exception e) {
-		
-		LOGGER.error(e.getMessage());
-		
-	}
 
 }
