@@ -111,6 +111,7 @@ public class CollegueService {
 			throw new CollegueInvalideException("L'URL de la photo doit commencer par http");
 
 		collegueRecherche.setPhotoUrl(photoUrl);
+		
 		return collegueRecherche;
 	}
 
@@ -122,10 +123,12 @@ public class CollegueService {
 	 * @return List<Collegue>
 	 */
 	public List<Collegue> rechercherParNom(String nomRecherche) {
+		
+		List<Collegue> listeCollegues = colRepo.findDistinctPeopleByNom(nomRecherche);
 
-		if (!colRepo.findDistinctPeopleByNom(nomRecherche).isEmpty()) {
+		if (!listeCollegues.isEmpty()) {
 
-			return colRepo.findDistinctPeopleByNom(nomRecherche);
+			return listeCollegues;
 
 		} else {
 
