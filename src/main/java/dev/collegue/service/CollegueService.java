@@ -58,6 +58,9 @@ public class CollegueService {
 
 		if (!collegue.getPhotoUrl().startsWith("http"))
 			throw new CollegueInvalideException("L'URL de la photo doit commencer par http");
+		
+		if (collegue.getPhotoUrl().length() > 255)
+			throw new CollegueInvalideException("L'URL de la photo ne peut pas contenir plus de 255 caractères");
 
 		Period period = Period.between(collegue.getDateDeNaissance(), LocalDate.now());
 
