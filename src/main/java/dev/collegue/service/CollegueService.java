@@ -61,6 +61,9 @@ public class CollegueService {
 		
 		if (collegue.getPhotoUrl().length() > 255)
 			throw new CollegueInvalideException("L'URL de la photo ne peut pas contenir plus de 255 caractères");
+		
+		if (collegue.getPhotoUrl().length() < 7)
+			throw new CollegueInvalideException("L'URL de la photo ne peut pas contenir moins de 7 caractères");
 
 		Period period = Period.between(collegue.getDateDeNaissance(), LocalDate.now());
 
@@ -112,6 +115,12 @@ public class CollegueService {
 
 		if (!photoUrl.startsWith("http"))
 			throw new CollegueInvalideException("L'URL de la photo doit commencer par http");
+		
+		if (photoUrl.length() > 255)
+			throw new CollegueInvalideException("L'URL de la photo ne peut pas contenir plus de 255 caractères");
+		
+		if (photoUrl.length() < 7)
+			throw new CollegueInvalideException("L'URL de la photo ne peut pas contenir moins de 7 caractères");
 
 		collegueRecherche.setPhotoUrl(photoUrl);
 		
