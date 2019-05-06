@@ -175,5 +175,16 @@ public class CollegueService {
 		return colRepo.findCollegueEmail(email) != null;
 	
 	}
+	
+	/**
+	 * Récupère la liste complète des collègues présents dans la base de données
+	 * 
+	 * @return List<Collegue>
+	 */
+	public List<Collegue> recupTousLesCollegues() {
+		
+		return colRepo.findAll();
+		
+	}
 
 }

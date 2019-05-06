@@ -111,4 +111,11 @@ public class CollegueController {
         return service.emailAlreadyExist(email);
         
     }
+	
+	@GetMapping(value = "/all")
+	public List<Collegue> recupAllCollegues() {
+		
+		return service.recupTousLesCollegues();
+		
+	}
 }
