@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import dev.collegue.dao.CollegueRepository;
 import dev.collegue.entite.Collegue;
+import dev.collegue.entite.StockagePhotoMatricule;
 import dev.collegue.exception.CollegueInvalideException;
 import dev.collegue.exception.CollegueNonTrouveException;
 
@@ -177,13 +179,16 @@ public class CollegueService {
 	}
 	
 	/**
-	 * Récupère la liste complète des collègues présents dans la base de données
+	 * Récupères toutes les photos des collègues assortis de leur matricule depuis la base de données
 	 * 
-	 * @return List<Collegue>
+	 * @return List<StockagePhotoMatricule>
 	 */
-	public List<Collegue> recupTousLesCollegues() {
+	public List<StockagePhotoMatricule> recupPhotos() {
 		
-		return colRepo.findAll();
+		return colRepo.findAll()
+				.stream()
+				.map((Collegue collegue) -> new StockagePhotoMatricule(collegue.getMatricule(), collegue.getPhotoUrl()))
+				.collect(Collectors.toList());
 		
 	}
 

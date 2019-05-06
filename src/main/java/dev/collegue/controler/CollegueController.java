@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.collegue.entite.Collegue;
 import dev.collegue.entite.CollegueModifie;
+import dev.collegue.entite.StockagePhotoMatricule;
 import dev.collegue.service.CollegueService;
 
 /**
@@ -112,10 +113,15 @@ public class CollegueController {
         
     }
 	
-	@GetMapping(value = "/all")
-	public List<Collegue> recupAllCollegues() {
+	/**
+	 * Retourne toutes les photos des collègues assortis de leur matricule
+	 * 
+	 * @return List<StockagePhotoMatricule>
+	 */
+	@GetMapping(value = "/photos")
+	public List<StockagePhotoMatricule> recupAllPhotos() {
 		
-		return service.recupTousLesCollegues();
+		return service.recupPhotos();
 		
 	}
 }
