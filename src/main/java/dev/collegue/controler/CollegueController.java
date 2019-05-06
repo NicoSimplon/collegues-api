@@ -99,4 +99,16 @@ public class CollegueController {
 		return ResponseEntity.status(HttpStatus.OK).body(collegueModifie);
 	}
 	
+	/**
+	 * Retourne true si l'email dont l'existence est vérifiée existe déjà
+	 * 
+	 * @param email
+	 * @return boolean
+	 */
+	@GetMapping(value = "/verif")
+    public boolean verifierEmailExist(@RequestParam("email") String email) {
+
+        return service.emailAlreadyExist(email);
+        
+    }
 }

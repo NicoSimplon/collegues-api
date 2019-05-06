@@ -163,5 +163,17 @@ public class CollegueService {
 
 
 	}
+	
+	/**
+	 * Vérifie si un email existe dans la base de données
+	 * 
+	 * @param email
+	 * @return boolean
+	 */
+	public boolean emailAlreadyExist(String email) {
+		
+		return colRepo.findCollegueEmail(email) != null;
+	
+	}
 
 }
