@@ -1,64 +1,43 @@
 package dev.collegue.entite;
 
 import java.time.LocalDate;
-import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "collegue")
-public class Collegue {
+public class CollegueDTO {
 
 	/**
 	 * String matricule identifiant le collègue
 	 */
-	@Id
-	@Column(name = "matricule")
 	private String matricule;
 
 	/**
 	 * String Nom du collègue
 	 */
-	@Column
 	private String nom;
 
 	/**
 	 * String Prénom du collègue
 	 */
-	@Column
 	private String prenoms;
 
 	/**
 	 * String Date de naissance du collègue
 	 */
-	@Column
 	private LocalDate dateDeNaissance;
 
 	/**
 	 * String url de la photo du collègue
 	 */
-	@Column
 	private String photoUrl;
 
 	/**
 	 * String email pro
 	 */
-	@Column
 	private String email;
-
-	@OneToMany(mappedBy = "collegue")
-	private List<Commentaire> commentaires;
-
-	public Collegue() {
-		/**
-		 * Constructeur par défaut
-		 */
+	
+	public CollegueDTO() {
+		
 	}
-
+	
 	/**
 	 * @param matricule
 	 * @param nom
@@ -66,7 +45,8 @@ public class Collegue {
 	 * @param dateDeNaissance
 	 * @param photoUrl
 	 */
-	public Collegue(String nom, String prenoms, LocalDate dateDeNaissance, String photoUrl, String email) {
+	public CollegueDTO(String matricule, String nom, String prenoms, LocalDate dateDeNaissance, String photoUrl, String email) {
+		this.matricule = matricule;
 		this.nom = nom;
 		this.prenoms = prenoms;
 		this.dateDeNaissance = dateDeNaissance;
@@ -162,21 +142,6 @@ public class Collegue {
 	 */
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	/**
-	 * @return the commentaires
-	 */
-	public List<Commentaire> getCommentaires() {
-		return commentaires;
-	}
-
-	/**
-	 * @param commentaires
-	 *            the commentaires to set
-	 */
-	public void setCommentaires(List<Commentaire> commentaires) {
-		this.commentaires = commentaires;
 	}
 
 }

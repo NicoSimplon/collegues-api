@@ -7,9 +7,12 @@ import org.springframework.stereotype.Service;
 
 import dev.collegue.dao.CollegueRepository;
 import dev.collegue.dao.CommentaireRepository;
+import dev.collegue.entite.Collegue;
 import dev.collegue.entite.Commentaire;
+import dev.collegue.entite.CommentaireDTO;
 import dev.collegue.exception.CollegueNonTrouveException;
 import dev.collegue.exception.CommentaireInvalideException;
+import dev.collegue.utils.DtoUtils;
 
 @Service
 public class CommentaireService {
@@ -33,7 +36,7 @@ public class CommentaireService {
 	 * @param commentaire
 	 * @return Commentaire
 	 */
-	public Commentaire sauvegarderCommentaire(Commentaire commentaire) {
+	public CommentaireDTO sauvegarderCommentaire(String matricule, CommentaireDTO commentaire) {
 		
 		if (commentaire == null) {
 			throw new CommentaireInvalideException("Le commentaire envoyé est invalide");
@@ -42,8 +45,14 @@ public class CommentaireService {
 			throw new CommentaireInvalideException("Le commentaire envoyé est invalide: taille minimale de 5 caractères");
 		}
 		
-		this.comRepo.save(commentaire);			
-		return commentaire;
+		Commentaire com = DtoUtils.toCommentaire(commentaire);
+		
+		Collegue collegue = this.colRepo.findById(matricule).orElseThrow(CollegueNonTrouveException::new);
+		com.setCollegue(collegue);
+		
+		this.comRepo.save(com);
+		
+		return DtoUtils.toCommentaireDTO(com);
 	}
 	
 	/**

@@ -1,5 +1,6 @@
 package dev.collegue.controler;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,11 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.collegue.entite.Collegue;
+import dev.collegue.entite.CollegueDTO;
 import dev.collegue.entite.CollegueModifie;
-import dev.collegue.entite.Commentaire;
+import dev.collegue.entite.CommentaireDTO;
 import dev.collegue.entite.StockagePhotoMatricule;
 import dev.collegue.service.CollegueService;
 import dev.collegue.service.CommentaireService;
+import dev.collegue.utils.DtoUtils;
 
 /**
  * Couche Controller de l'application, c'est ici que sont gérées les requêtes et réponses HTTP
@@ -60,9 +63,9 @@ public class CollegueController {
 	 * @return Collegue
 	 */
 	@GetMapping(value = "/{matriculeRecherche}")
-	public Collegue trouverCollegueParMatricule(@PathVariable String matriculeRecherche) {
+	public CollegueDTO trouverCollegueParMatricule(@PathVariable String matriculeRecherche) {
 
-		return service.rechercherParMatricule(matriculeRecherche);
+		return DtoUtils.toCollegueDTO(service.rechercherParMatricule(matriculeRecherche));
 	
 	}
 	
@@ -73,9 +76,9 @@ public class CollegueController {
 	 * @return Collegue
 	 */
 	@PostMapping
-	public ResponseEntity<Object> ajouterCollegue(@RequestBody Collegue collegue) {
+	public ResponseEntity<Object> ajouterCollegue(@RequestBody CollegueDTO collegue) {
 		
-		Collegue newCollegue = service.sauvegardeCollegue(collegue);
+		CollegueDTO newCollegue = DtoUtils.toCollegueDTO(service.sauvegardeCollegue(DtoUtils.toCollegue(collegue)));
 		return ResponseEntity.status(HttpStatus.OK).body(newCollegue);
 
 	}
@@ -132,17 +135,23 @@ public class CollegueController {
 	}
 	
 	@GetMapping(value = "/{matricule}/commentaires")
-	public List<Commentaire> recupCommentairesByMatricule(@PathVariable String matricule) {
+	public List<CommentaireDTO> recupCommentairesByMatricule(@PathVariable String matricule) {
 		
-		return serviceCom.recupererCommentaireParMatricule(matricule);
+		return serviceCom.recupererCommentaireParMatricule(matricule)
+				.stream()
+				.map(DtoUtils::toCommentaireDTO)
+				.collect(Collectors.toList());
 		
 	}
 	
 	@PostMapping(value = "/{matricule}/commentaires")
-	public ResponseEntity<Object> ajouterCommentaire(@RequestBody Commentaire commentaire) {
+	public ResponseEntity<Object> ajouterCommentaire(@PathVariable String matricule, @RequestBody CommentaireDTO commentaire) {
 		
-		serviceCom.sauvegarderCommentaire(commentaire);
-		return ResponseEntity.status(HttpStatus.OK).body(commentaire);
+		commentaire.setCreationDate(LocalDateTime.now());
+		
+		CommentaireDTO newCommentaire = serviceCom.sauvegarderCommentaire(matricule, commentaire);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(newCommentaire);
 
 	}
 	

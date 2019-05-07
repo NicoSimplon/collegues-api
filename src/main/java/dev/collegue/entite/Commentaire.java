@@ -36,11 +36,6 @@ public class Commentaire {
 	private String contenu;
 	
 	/**
-	 * Default Constructor
-	 */
-	public Commentaire(){ }
-
-	/**
 	 * Date de création du commentaire
 	 */
 	@Column(name = "created_at")
@@ -53,6 +48,16 @@ public class Commentaire {
 	@JoinColumn(name = "collegue_matricule")
 	private Collegue collegue;
 
+	public Commentaire() {
+
+	}
+
+	public Commentaire(Integer id, String contenu, LocalDateTime creationDate) {
+		this.id = id;
+		this.contenu = contenu;
+		this.creationDate = creationDate;
+	}
+	
 	/**
 	 * @return the id
 	 */
