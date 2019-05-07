@@ -21,4 +21,10 @@ public class MyExceptionHandler {
 	    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bodyOfResponse);
 	 }
 	
+	@ExceptionHandler(value = { CommentaireInvalideException.class })
+	protected ResponseEntity<Object> handleConflictCommentaireInvalid(RuntimeException ex, WebRequest request) {
+		String bodyOfResponse = "Commentaire invalide: " + CollegueInvalideException.message;
+	    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bodyOfResponse);
+	 }
+	
 }

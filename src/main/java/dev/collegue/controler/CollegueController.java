@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,8 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.collegue.entite.Collegue;
 import dev.collegue.entite.CollegueModifie;
+import dev.collegue.entite.Commentaire;
 import dev.collegue.entite.StockagePhotoMatricule;
 import dev.collegue.service.CollegueService;
+import dev.collegue.service.CommentaireService;
 
 /**
  * Couche Controller de l'application, c'est ici que sont gérées les requêtes et réponses HTTP
@@ -34,6 +37,9 @@ public class CollegueController {
 
 	@Autowired
 	private CollegueService service;
+	
+	@Autowired
+	private CommentaireService serviceCom;
 	
 	/**
 	 * Méthode retournant le matricule du collègue recherché
@@ -124,4 +130,26 @@ public class CollegueController {
 		return service.recupPhotos();
 		
 	}
+	
+	@GetMapping(value = "/{matricule}/commentaires")
+	public List<Commentaire> recupCommentairesByMatricule(@PathVariable String matricule) {
+		
+		return serviceCom.recupererCommentaireParMatricule(matricule);
+		
+	}
+	
+	@PostMapping(value = "/{matricule}/commentaires")
+	public ResponseEntity<Object> ajouterCommentaire(@RequestBody Commentaire commentaire) {
+		
+		serviceCom.sauvegarderCommentaire(commentaire);
+		return ResponseEntity.status(HttpStatus.OK).body(commentaire);
+
+	}
+	
+	@DeleteMapping(value = "/{matricule}/commentaires/{id}")
+	public ResponseEntity<Object> supprimerCommentaire(@PathVariable Integer id) {
+		serviceCom.supprimerCommentaire(id);
+		return ResponseEntity.status(HttpStatus.OK).body("La suppression a été réalisée avec succès");
+	}
+	
 }

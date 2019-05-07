@@ -1,10 +1,12 @@
 package dev.collegue.entite;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -47,6 +49,9 @@ public class Collegue {
 	 */
 	@Column
 	private String email;
+	
+	@OneToMany(mappedBy = "collegue")
+	private List<Commentaire> commentaires;
 
 	public Collegue() {
 		/**
