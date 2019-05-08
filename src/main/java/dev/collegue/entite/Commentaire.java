@@ -32,7 +32,7 @@ public class Commentaire {
 	/**
 	 * Contenu du commentaire
 	 */
-	@Column(name = "content")
+	@Column(name = "content", length=5000)
 	private String contenu;
 	
 	/**
