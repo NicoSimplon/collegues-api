@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,6 +52,7 @@ public class CollegueController {
 	 * @return String matricule
 	 */
 	@GetMapping
+	@Secured("ROLE_USER")
     public List<String> trouverCollegueParNom(@RequestParam("nom") String nomRecherche) {
 
         return service.rechercherParNom(nomRecherche).stream().map(Collegue::getMatricule).collect(Collectors.toList());
@@ -63,6 +65,7 @@ public class CollegueController {
 	 * @return Collegue
 	 */
 	@GetMapping(value = "/{matriculeRecherche}")
+	@Secured("ROLE_USER")
 	public CollegueDTO trouverCollegueParMatricule(@PathVariable String matriculeRecherche) {
 
 		return DtoUtils.toCollegueDTO(service.rechercherParMatricule(matriculeRecherche));
@@ -76,6 +79,7 @@ public class CollegueController {
 	 * @return Collegue
 	 */
 	@PostMapping
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<Object> ajouterCollegue(@RequestBody CollegueDTO collegue) {
 		
 		CollegueDTO newCollegue = DtoUtils.toCollegueDTO(service.sauvegardeCollegue(DtoUtils.toCollegue(collegue)));
@@ -91,6 +95,7 @@ public class CollegueController {
 	 * @return
 	 */
 	@PatchMapping(value = "/{matricule}")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<Object> modifierCollegue(@PathVariable String matricule, @RequestBody CollegueModifie fieldContainer) {
 		
 		Collegue collegueModifie = null;
@@ -116,6 +121,7 @@ public class CollegueController {
 	 * @return boolean
 	 */
 	@GetMapping(value = "/verif")
+	@Secured("ROLE_USER")
     public boolean verifierEmailExist(@RequestParam("email") String email) {
 
         return service.emailAlreadyExist(email);
@@ -128,6 +134,7 @@ public class CollegueController {
 	 * @return List<StockagePhotoMatricule>
 	 */
 	@GetMapping(value = "/photos")
+	@Secured("ROLE_USER")
 	public List<StockagePhotoMatricule> recupAllPhotos() {
 		
 		return service.recupPhotos();
@@ -135,6 +142,7 @@ public class CollegueController {
 	}
 	
 	@GetMapping(value = "/{matricule}/commentaires")
+	@Secured("ROLE_USER")
 	public List<CommentaireDTO> recupCommentairesByMatricule(@PathVariable String matricule) {
 		
 		return serviceCom.recupererCommentaireParMatricule(matricule)
@@ -145,6 +153,7 @@ public class CollegueController {
 	}
 	
 	@PostMapping(value = "/{matricule}/commentaires")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<Object> ajouterCommentaire(@PathVariable String matricule, @RequestBody CommentaireDTO commentaire) {
 		
 		commentaire.setCreationDate(LocalDateTime.now());
@@ -156,6 +165,7 @@ public class CollegueController {
 	}
 	
 	@DeleteMapping(value = "/{matricule}/commentaires/{id}")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<Object> supprimerCommentaire(@PathVariable Integer id) {
 		serviceCom.supprimerCommentaire(id);
 		return ResponseEntity.status(HttpStatus.OK).body("La suppression a été réalisée avec succès");

@@ -1,0 +1,25 @@
+package dev.collegue.entite;
+
+public class InfosAuthentification {
+
+	private String email;
+
+	private String motDePasse;
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setNomUtilisateur(String email) {
+		this.email = email;
+	}
+
+	public String getMotDePasse() {
+		return motDePasse;
+	}
+
+	public void setMotDePasse(String motDePasse) {
+		this.motDePasse = motDePasse;
+	}
+
+}

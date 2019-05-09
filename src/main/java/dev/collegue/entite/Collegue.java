@@ -1,10 +1,13 @@
 package dev.collegue.entite;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -23,35 +26,38 @@ public class Collegue {
 	/**
 	 * String Nom du collègue
 	 */
-	@Column
 	private String nom;
 
 	/**
 	 * String Prénom du collègue
 	 */
-	@Column
 	private String prenoms;
 
 	/**
 	 * String Date de naissance du collègue
 	 */
-	@Column
 	private LocalDate dateDeNaissance;
 
 	/**
 	 * String url de la photo du collègue
 	 */
-	@Column
 	private String photoUrl;
 
 	/**
 	 * String email pro
 	 */
-	@Column
 	private String email;
+	
+	/**
+	 * String mot de passe utilisateur
+	 */
+	private String motDePasse;
 
 	@OneToMany(mappedBy = "collegue")
 	private List<Commentaire> commentaires;
+	
+	@ElementCollection(fetch = FetchType.EAGER)
+	private List<String> roles = new ArrayList<>();
 
 	public Collegue() {
 		/**
@@ -65,6 +71,23 @@ public class Collegue {
 	 * @param prenoms
 	 * @param dateDeNaissance
 	 * @param photoUrl
+	 */
+	public Collegue(String nom, String prenoms, LocalDate dateDeNaissance, String photoUrl, String email, String password, List<String> roles) {
+		this.nom = nom;
+		this.prenoms = prenoms;
+		this.dateDeNaissance = dateDeNaissance;
+		this.photoUrl = photoUrl;
+		this.email = email;
+		this.motDePasse = password;
+		this.roles = roles;
+	}
+	
+	/**
+	 * @param nom
+	 * @param prenoms
+	 * @param dateDeNaissance
+	 * @param photoUrl
+	 * @param email
 	 */
 	public Collegue(String nom, String prenoms, LocalDate dateDeNaissance, String photoUrl, String email) {
 		this.nom = nom;
@@ -177,6 +200,34 @@ public class Collegue {
 	 */
 	public void setCommentaires(List<Commentaire> commentaires) {
 		this.commentaires = commentaires;
+	}
+
+	/**
+	 * @return the motDePasse
+	 */
+	public String getMotDePasse() {
+		return motDePasse;
+	}
+
+	/**
+	 * @param motDePasse the motDePasse to set
+	 */
+	public void setMotDePasse(String motDePasse) {
+		this.motDePasse = motDePasse;
+	}
+
+	/**
+	 * @return the roles
+	 */
+	public List<String> getRoles() {
+		return roles;
+	}
+
+	/**
+	 * @param roles the roles to set
+	 */
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
 	}
 
 }
