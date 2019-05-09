@@ -9,26 +9,26 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import dev.collegue.dao.UtilisateurRepository;
-import dev.collegue.entite.Utilisateur;
+import dev.collegue.dao.CollegueRepository;
+import dev.collegue.entite.Collegue;
 
 @Service
 public class UserDetailServiceImpl implements UserDetailsService {
 
-	private UtilisateurRepository utilisateurRepository;
+	private CollegueRepository collegueRepository;
 
-	public UserDetailServiceImpl(UtilisateurRepository utilisateurRepository) {
-		this.utilisateurRepository = utilisateurRepository;
+	public UserDetailServiceImpl(CollegueRepository colRepo) {
+		this.collegueRepository = colRepo;
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-		Utilisateur utilisateurTrouve = this.utilisateurRepository.findByEmail(username)
+		Collegue collegueTrouve = this.collegueRepository.findCollegueEmail(email)
 				.orElseThrow(() -> new UsernameNotFoundException("Utilisateur non trouvé"));
 
-		return new User(utilisateurTrouve.getEmail(), utilisateurTrouve.getMotDePasse(),
-				utilisateurTrouve.getRoles().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
+		return new User(collegueTrouve.getEmail(), collegueTrouve.getMotDePasse(),
+				collegueTrouve.getRoles().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
 
 	}
 

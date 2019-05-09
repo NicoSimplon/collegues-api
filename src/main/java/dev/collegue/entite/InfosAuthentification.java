@@ -10,7 +10,7 @@ public class InfosAuthentification {
 		return email;
 	}
 
-	public void setNomUtilisateur(String email) {
+	public void setEmail(String email) {
 		this.email = email;
 	}
 

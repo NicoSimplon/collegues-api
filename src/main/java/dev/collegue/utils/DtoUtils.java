@@ -1,9 +1,12 @@
 package dev.collegue.utils;
 
+import java.util.Arrays;
+
 import dev.collegue.entite.Collegue;
 import dev.collegue.entite.CollegueDTO;
 import dev.collegue.entite.Commentaire;
 import dev.collegue.entite.CommentaireDTO;
+import dev.collegue.entite.CreateCollegue;
 
 public interface DtoUtils {
 
@@ -19,6 +22,13 @@ public interface DtoUtils {
 		return new Collegue(col.getNom(), col.getPrenoms(), col.getDateDeNaissance(), col.getPhotoUrl(),
 				col.getEmail());
 
+	}
+	
+	public static Collegue toCollegueFromCreateCollegue(CreateCollegue col) {
+		
+		return new Collegue(col.getNom(), col.getPrenoms(), col.getDateDeNaissance(), col.getPhotoUrl(),
+				col.getEmail(), col.getMotDePasse(), Arrays.asList("ROLE_USER"));
+		
 	}
 
 	public static CommentaireDTO toCommentaireDTO(Commentaire com) {

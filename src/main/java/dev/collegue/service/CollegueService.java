@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,9 @@ public class CollegueService {
 
 	@Autowired
 	CollegueRepository colRepo;
+	
+	@Autowired
+    private PasswordEncoder passwordEncoder;
 
 	/**
 	 * @param colRepo the repository to set
@@ -71,8 +75,13 @@ public class CollegueService {
 
 		if (period.getYears() < 18)
 			throw new CollegueInvalideException("Un nouveau collègue doit avoir 18 ans au moins");
+		
+		if (collegue.getMotDePasse() == null) {
+			throw new CollegueInvalideException("Un nouveau collègue doit avoir un mot de passe");
+		}
 
 		collegue.setMatricule(UUID.randomUUID().toString());
+		collegue.setMotDePasse(this.passwordEncoder.encode(collegue.getMotDePasse()));
 
 		colRepo.save(collegue);
 
@@ -174,7 +183,7 @@ public class CollegueService {
 	 */
 	public boolean emailAlreadyExist(String email) {
 		
-		return colRepo.findCollegueEmail(email) != null;
+		return colRepo.findCollegueEmail(email).isPresent();
 	
 	}
 	

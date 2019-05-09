@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -23,6 +22,7 @@ import dev.collegue.entite.Collegue;
 import dev.collegue.entite.CollegueDTO;
 import dev.collegue.entite.CollegueModifie;
 import dev.collegue.entite.CommentaireDTO;
+import dev.collegue.entite.CreateCollegue;
 import dev.collegue.entite.StockagePhotoMatricule;
 import dev.collegue.service.CollegueService;
 import dev.collegue.service.CommentaireService;
@@ -35,7 +35,6 @@ import dev.collegue.utils.DtoUtils;
  *
  */
 @RestController
-@CrossOrigin
 @RequestMapping("/collegues")
 public class CollegueController {
 
@@ -80,9 +79,9 @@ public class CollegueController {
 	 */
 	@PostMapping
 	@Secured("ROLE_ADMIN")
-	public ResponseEntity<Object> ajouterCollegue(@RequestBody CollegueDTO collegue) {
+	public ResponseEntity<Object> ajouterCollegue(@RequestBody CreateCollegue collegue) {
 		
-		CollegueDTO newCollegue = DtoUtils.toCollegueDTO(service.sauvegardeCollegue(DtoUtils.toCollegue(collegue)));
+		CollegueDTO newCollegue = DtoUtils.toCollegueDTO(service.sauvegardeCollegue(DtoUtils.toCollegueFromCreateCollegue(collegue)));
 		return ResponseEntity.status(HttpStatus.OK).body(newCollegue);
 
 	}
@@ -98,16 +97,16 @@ public class CollegueController {
 	@Secured("ROLE_ADMIN")
 	public ResponseEntity<Object> modifierCollegue(@PathVariable String matricule, @RequestBody CollegueModifie fieldContainer) {
 		
-		Collegue collegueModifie = null;
+		CollegueDTO collegueModifie = null;
 		
 		if (fieldContainer.getEmail() != null) {
 			
-			collegueModifie = service.modifierEmail(matricule, fieldContainer.getEmail());
+			collegueModifie = DtoUtils.toCollegueDTO(service.modifierEmail(matricule, fieldContainer.getEmail()));
 		}
 		
 		if (fieldContainer.getPhotoUrl() != null) {
 			
-			collegueModifie = service.modifierPhotoUrl(matricule, fieldContainer.getPhotoUrl());
+			collegueModifie = DtoUtils.toCollegueDTO(service.modifierPhotoUrl(matricule, fieldContainer.getPhotoUrl()));
 			
 		}
 		
