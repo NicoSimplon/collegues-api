@@ -83,6 +83,22 @@ public class Collegue {
 	}
 	
 	/**
+	 * @param matricule
+	 * @param nom
+	 * @param prenoms
+	 * @param dateDeNaissance
+	 * @param photoUrl
+	 */
+	public Collegue(String nom, String prenoms, LocalDate dateDeNaissance, String photoUrl, String email, String password) {
+		this.nom = nom;
+		this.prenoms = prenoms;
+		this.dateDeNaissance = dateDeNaissance;
+		this.photoUrl = photoUrl;
+		this.email = email;
+		this.motDePasse = password;
+	}
+	
+	/**
 	 * @param nom
 	 * @param prenoms
 	 * @param dateDeNaissance

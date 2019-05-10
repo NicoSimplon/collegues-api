@@ -37,14 +37,14 @@ public class CreateCollegue {
 	private String email;
 	
 	/**
-	 * Liste des rôles de l'utilisateur
-	 */
-	private List<String> roles = new ArrayList<>();
-	
-	/**
 	 * Mot de passe de l'utilisateur
 	 */
 	private String MotDePasse;
+	
+	/**
+	 * Liste des roles du nouveau collègues
+	 */
+	private List<String> roles = new ArrayList<>();
 	
 	public CreateCollegue() {
 		

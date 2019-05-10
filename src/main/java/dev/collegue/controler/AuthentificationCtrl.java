@@ -74,7 +74,7 @@ public class AuthentificationCtrl {
 		response.addCookie(authCookie);
 
 		return ResponseEntity.ok().body(
-				this.service.getCollegueCo(SecurityContextHolder.getContext().getAuthentication().getName())
+				this.service.getCollegueCo(user.getUsername())
 		);
 
 	}

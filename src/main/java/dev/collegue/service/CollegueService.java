@@ -63,6 +63,9 @@ public class CollegueService {
 
 		if (collegue.getEmail().length() < 3)
 			throw new CollegueInvalideException("L'email doit comporter au moins trois caractères");
+		
+		if (this.emailAlreadyExist(collegue.getEmail()))
+			throw new CollegueInvalideException("Cet email existe déjà");
 
 		if (!collegue.getPhotoUrl().startsWith("http"))
 			throw new CollegueInvalideException("L'URL de la photo doit commencer par http");
