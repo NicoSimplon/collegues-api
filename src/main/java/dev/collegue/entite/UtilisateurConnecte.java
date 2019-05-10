@@ -8,7 +8,7 @@ public class UtilisateurConnecte {
 	/**
 	 * String Matricule du collègue connecté
 	 */
-	private String matricule;
+	private String email;
 
 	/**
 	 * String Nom du collègue connecté
@@ -28,15 +28,15 @@ public class UtilisateurConnecte {
 	/**
 	 * @return the matricule
 	 */
-	public String getMatricule() {
-		return matricule;
+	public String getEmail() {
+		return email;
 	}
 
 	/**
 	 * @param matricule the matricule to set
 	 */
-	public void setMatricule(String matricule) {
-		this.matricule = matricule;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	/**

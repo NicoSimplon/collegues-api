@@ -12,11 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,8 +48,6 @@ public class AuthentificationCtrl {
 	
 	@Autowired
 	private CollegueRepository service;
-	
-	private String email;
 
 	@PostMapping(value = "/auth")
 	public ResponseEntity authenticate(@RequestBody InfosAuthentification authenticationRequest,
@@ -66,8 +64,6 @@ public class AuthentificationCtrl {
 
 		Map<String, Object> infosSupplementaireToken = new HashMap<>();
 		infosSupplementaireToken.put("roles", rolesList);
-		
-		this.email = authenticationRequest.getEmail();
 
 		String jetonJWT = Jwts.builder().setSubject(user.getUsername()).addClaims(infosSupplementaireToken)
 				.setExpiration(new Date(System.currentTimeMillis() + EXPIRES_IN * 1000))
@@ -84,14 +80,15 @@ public class AuthentificationCtrl {
 	}
 	
 	@GetMapping(value = "/me")
-	@Secured("ROLE_USER")
 	public UtilisateurConnecte getUserIdentity() {
 		
 		UtilisateurConnecte user = new UtilisateurConnecte();
 		
-		Collegue collegueConnecte = this.service.findCollegueEmail(this.email).orElseThrow(CollegueNonTrouveException::new);
+		Collegue collegueConnecte = this.service.findCollegueEmail(
+			SecurityContextHolder.getContext().getAuthentication().getName()
+		).orElseThrow(CollegueNonTrouveException::new);
 		
-		user.setMatricule(collegueConnecte.getMatricule());
+		user.setEmail(collegueConnecte.getEmail());
 		user.setNom(collegueConnecte.getNom());
 		user.setPrenoms(collegueConnecte.getPrenoms());
 		user.setRoles(collegueConnecte.getRoles());

@@ -39,12 +39,12 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 					.map(cookie -> cookie.getValue()).forEach(token -> {
 						Claims body = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
 
-						String username = body.getSubject();
+						String email = body.getSubject();
 
 						List<SimpleGrantedAuthority> roles = Stream.of(body.get("roles", String.class).split(","))
 								.map(roleString -> new SimpleGrantedAuthority(roleString)).collect(Collectors.toList());
 
-						Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, roles);
+						Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, roles);
 						SecurityContextHolder.getContext().setAuthentication(authentication);
 
 					});
