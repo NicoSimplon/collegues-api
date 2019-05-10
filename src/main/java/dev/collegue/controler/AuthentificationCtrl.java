@@ -24,11 +24,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.collegue.dao.CollegueRepository;
-import dev.collegue.entite.Collegue;
 import dev.collegue.entite.InfosAuthentification;
 import dev.collegue.entite.UtilisateurConnecte;
-import dev.collegue.exception.CollegueNonTrouveException;
+import dev.collegue.service.CollegueService;
 import io.jsonwebtoken.Jwts;
 
 @RestController
@@ -47,7 +45,7 @@ public class AuthentificationCtrl {
 	private AuthenticationManager authenticationManager;
 	
 	@Autowired
-	private CollegueRepository service;
+	private CollegueService service;
 
 	@PostMapping(value = "/auth")
 	public ResponseEntity authenticate(@RequestBody InfosAuthentification authenticationRequest,
@@ -75,27 +73,19 @@ public class AuthentificationCtrl {
 		authCookie.setPath("/");
 		response.addCookie(authCookie);
 
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok().body(
+				this.service.getCollegueCo(SecurityContextHolder.getContext().getAuthentication().getName())
+		);
 
 	}
 	
 	@GetMapping(value = "/me")
 	public UtilisateurConnecte getUserIdentity() {
 		
-		UtilisateurConnecte user = new UtilisateurConnecte();
-		
-		Collegue collegueConnecte = this.service.findCollegueEmail(
-			SecurityContextHolder.getContext().getAuthentication().getName()
-		).orElseThrow(CollegueNonTrouveException::new);
-		
-		user.setEmail(collegueConnecte.getEmail());
-		user.setNom(collegueConnecte.getNom());
-		user.setPrenoms(collegueConnecte.getPrenoms());
-		user.setRoles(collegueConnecte.getRoles());
-		
-		return user;
+		return this.service.getCollegueCo(SecurityContextHolder.getContext().getAuthentication().getName());
 		
 	}
+	
 
 	@ExceptionHandler(BadCredentialsException.class)
 	public ResponseEntity mauvaiseInfosConnexion(BadCredentialsException e) {

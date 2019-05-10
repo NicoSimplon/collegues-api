@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import dev.collegue.dao.CollegueRepository;
 import dev.collegue.entite.Collegue;
 import dev.collegue.entite.StockagePhotoMatricule;
+import dev.collegue.entite.UtilisateurConnecte;
 import dev.collegue.exception.CollegueInvalideException;
 import dev.collegue.exception.CollegueNonTrouveException;
 
@@ -29,13 +30,14 @@ public class CollegueService {
 
 	@Autowired
 	CollegueRepository colRepo;
-	
+
 	@Autowired
-    private PasswordEncoder passwordEncoder;
+	private PasswordEncoder passwordEncoder;
 
 	/**
-	 * @param colRepo the repository to set
-	 *            
+	 * @param colRepo
+	 *            the repository to set
+	 * 
 	 */
 	public void setColRepo(CollegueRepository colRepo) {
 		this.colRepo = colRepo;
@@ -64,10 +66,10 @@ public class CollegueService {
 
 		if (!collegue.getPhotoUrl().startsWith("http"))
 			throw new CollegueInvalideException("L'URL de la photo doit commencer par http");
-		
+
 		if (collegue.getPhotoUrl().length() > 255)
 			throw new CollegueInvalideException("L'URL de la photo ne peut pas contenir plus de 255 caractères");
-		
+
 		if (collegue.getPhotoUrl().length() < 7)
 			throw new CollegueInvalideException("L'URL de la photo ne peut pas contenir moins de 7 caractères");
 
@@ -75,7 +77,7 @@ public class CollegueService {
 
 		if (period.getYears() < 18)
 			throw new CollegueInvalideException("Un nouveau collègue doit avoir 18 ans au moins");
-		
+
 		if (collegue.getMotDePasse() == null) {
 			throw new CollegueInvalideException("Un nouveau collègue doit avoir un mot de passe");
 		}
@@ -126,15 +128,15 @@ public class CollegueService {
 
 		if (!photoUrl.startsWith("http"))
 			throw new CollegueInvalideException("L'URL de la photo doit commencer par http");
-		
+
 		if (photoUrl.length() > 255)
 			throw new CollegueInvalideException("L'URL de la photo ne peut pas contenir plus de 255 caractères");
-		
+
 		if (photoUrl.length() < 7)
 			throw new CollegueInvalideException("L'URL de la photo ne peut pas contenir moins de 7 caractères");
 
 		collegueRecherche.setPhotoUrl(photoUrl);
-		
+
 		return collegueRecherche;
 	}
 
@@ -146,7 +148,7 @@ public class CollegueService {
 	 * @return List<Collegue>
 	 */
 	public List<Collegue> rechercherParNom(String nomRecherche) {
-		
+
 		List<Collegue> listeCollegues = colRepo.findDistinctPeopleByNom(nomRecherche);
 
 		if (!listeCollegues.isEmpty()) {
@@ -172,9 +174,8 @@ public class CollegueService {
 
 		return colRepo.findById(matriculeRecherche).orElseThrow(CollegueNonTrouveException::new);
 
-
 	}
-	
+
 	/**
 	 * Vérifie si un email existe dans la base de données
 	 * 
@@ -182,23 +183,39 @@ public class CollegueService {
 	 * @return boolean
 	 */
 	public boolean emailAlreadyExist(String email) {
-		
+
 		return colRepo.findCollegueEmail(email).isPresent();
-	
+
 	}
-	
+
 	/**
-	 * Récupères toutes les photos des collègues assortis de leur matricule depuis la base de données
+	 * Récupères toutes les photos des collègues assortis de leur matricule
+	 * depuis la base de données
 	 * 
 	 * @return List<StockagePhotoMatricule>
 	 */
 	public List<StockagePhotoMatricule> recupPhotos() {
-		
-		return colRepo.findAll()
-				.stream()
+
+		return colRepo.findAll().stream()
 				.map((Collegue collegue) -> new StockagePhotoMatricule(collegue.getMatricule(), collegue.getPhotoUrl()))
 				.collect(Collectors.toList());
-		
+
+	}
+
+	public UtilisateurConnecte getCollegueCo(String email) {
+
+		UtilisateurConnecte user = new UtilisateurConnecte();
+
+		Collegue collegueConnecte = this.colRepo.findCollegueEmail(email)
+				.orElseThrow(CollegueNonTrouveException::new);
+
+		user.setEmail(collegueConnecte.getEmail());
+		user.setNom(collegueConnecte.getNom());
+		user.setPrenoms(collegueConnecte.getPrenoms());
+		user.setRoles(collegueConnecte.getRoles());
+
+		return user;
+
 	}
 
 }
