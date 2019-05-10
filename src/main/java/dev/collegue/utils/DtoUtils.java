@@ -1,7 +1,5 @@
 package dev.collegue.utils;
 
-import java.util.Arrays;
-
 import dev.collegue.entite.Collegue;
 import dev.collegue.entite.CollegueDTO;
 import dev.collegue.entite.Commentaire;
@@ -27,7 +25,7 @@ public interface DtoUtils {
 	public static Collegue toCollegueFromCreateCollegue(CreateCollegue col) {
 		
 		return new Collegue(col.getNom(), col.getPrenoms(), col.getDateDeNaissance(), col.getPhotoUrl(),
-				col.getEmail(), col.getMotDePasse(), Arrays.asList("ROLE_USER"));
+				col.getEmail(), col.getMotDePasse(), col.getRoles());
 		
 	}
 

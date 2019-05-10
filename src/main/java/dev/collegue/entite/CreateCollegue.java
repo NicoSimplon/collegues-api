@@ -1,6 +1,8 @@
 package dev.collegue.entite;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CreateCollegue {
 
@@ -33,6 +35,11 @@ public class CreateCollegue {
 	 * String email pro
 	 */
 	private String email;
+	
+	/**
+	 * Liste des rôles de l'utilisateur
+	 */
+	private List<String> roles = new ArrayList<>();
 	
 	/**
 	 * Mot de passe de l'utilisateur
@@ -145,6 +152,20 @@ public class CreateCollegue {
 	 */
 	public void setMotDePasse(String motDePasse) {
 		MotDePasse = motDePasse;
+	}
+
+	/**
+	 * @return the roles
+	 */
+	public List<String> getRoles() {
+		return roles;
+	}
+
+	/**
+	 * @param roles the roles to set
+	 */
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
 	}
 
 }
