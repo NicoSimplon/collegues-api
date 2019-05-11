@@ -41,7 +41,7 @@ public class StartupDataInit {
 				"https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "biraben@societe.com",
 				"pass4", Arrays.asList("ROLE_USER")));
 
-		service.sauvegardeCollegue(new Collegue("Vianay", "Remy", LocalDate.of(1992, 5, 18),
+		service.sauvegardeCollegue(new Collegue("Viannais", "Remy", LocalDate.of(1992, 5, 18),
 				"https://www.petite-entreprise.net/donnees/cms/originales/deception-salarie.jpg", "vianay@societe.com",
 				"pass5", Arrays.asList("ROLE_USER")));
 
