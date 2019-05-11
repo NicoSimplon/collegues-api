@@ -89,7 +89,7 @@ public class AuthentificationCtrl {
 	}
 	
 	@PostMapping(value = "/profil")
-	@Secured("ROLE_ADMIN")
+	@Secured("ROLE_USER")
 	public ResponseEntity<String> updatePassword(@RequestBody CollegueModifPassword collegue) {
 		
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
