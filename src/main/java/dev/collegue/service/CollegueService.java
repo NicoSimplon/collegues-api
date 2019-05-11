@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import dev.collegue.dao.CollegueRepository;
 import dev.collegue.entite.Collegue;
+import dev.collegue.entite.CollegueModifPassword;
 import dev.collegue.entite.StockagePhotoMatricule;
 import dev.collegue.entite.UtilisateurConnecte;
 import dev.collegue.exception.CollegueInvalideException;
@@ -204,7 +205,14 @@ public class CollegueService {
 				.collect(Collectors.toList());
 
 	}
-
+	
+	
+	/**
+	 * Récupère l'identité de l'utilisateur connecté
+	 * 
+	 * @param email
+	 * @return UtilisateurConnecte
+	 */
 	public UtilisateurConnecte getCollegueCo(String email) {
 
 		UtilisateurConnecte user = new UtilisateurConnecte();
@@ -219,6 +227,17 @@ public class CollegueService {
 
 		return user;
 
+	}
+	
+	
+	public void modifierMotDePasse(CollegueModifPassword col, String email) {
+		
+		Collegue collegueAModif = this.colRepo.findCollegueEmail(email).orElseThrow(CollegueNonTrouveException::new);
+		
+		collegueAModif.setMotDePasse(this.passwordEncoder.encode(col.getMotDePasse()));
+		
+		this.colRepo.save(collegueAModif);
+		
 	}
 
 }

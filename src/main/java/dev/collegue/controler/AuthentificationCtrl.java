@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import dev.collegue.entite.CollegueModifPassword;
 import dev.collegue.entite.InfosAuthentification;
 import dev.collegue.entite.UtilisateurConnecte;
 import dev.collegue.service.CollegueService;
@@ -83,6 +85,18 @@ public class AuthentificationCtrl {
 	public UtilisateurConnecte getUserIdentity() {
 		
 		return this.service.getCollegueCo(SecurityContextHolder.getContext().getAuthentication().getName());
+		
+	}
+	
+	@PostMapping(value = "/profil")
+	@Secured("ROLE_ADMIN")
+	public ResponseEntity<String> updatePassword(@RequestBody CollegueModifPassword collegue) {
+		
+		String email = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		this.service.modifierMotDePasse(collegue, email);
+		
+		return ResponseEntity.status(HttpStatus.OK).body("La mise à jour a été faite avec succès");
 		
 	}
 	

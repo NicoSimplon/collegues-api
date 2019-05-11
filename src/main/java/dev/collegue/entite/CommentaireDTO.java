@@ -22,6 +22,10 @@ public class CommentaireDTO {
 	public CommentaireDTO() {
 
 	}
+	
+	public CommentaireDTO(String contenu) {
+		this.contenu = contenu;
+	}
 
 	public CommentaireDTO(Integer id, String contenu, LocalDateTime dateCreation) {
 		this.id = id;
