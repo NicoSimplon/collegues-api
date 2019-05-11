@@ -18,6 +18,7 @@ import dev.collegue.entite.StockagePhotoMatricule;
 import dev.collegue.entite.UtilisateurConnecte;
 import dev.collegue.exception.CollegueInvalideException;
 import dev.collegue.exception.CollegueNonTrouveException;
+import dev.collegue.exception.PasswordModifException;
 
 /**
  * Couche service de l'application, c'est ici que le CRUD vers la base de
@@ -233,6 +234,9 @@ public class CollegueService {
 	public void modifierMotDePasse(CollegueModifPassword col, String email) {
 		
 		Collegue collegueAModif = this.colRepo.findCollegueEmail(email).orElseThrow(CollegueNonTrouveException::new);
+		
+		if (col.getMotDePasse() == null)
+			throw new PasswordModifException("Une erreur est survenue: aucun mot de passe ou un mot de passe invalide n'a été transmis");
 		
 		collegueAModif.setMotDePasse(this.passwordEncoder.encode(col.getMotDePasse()));
 		

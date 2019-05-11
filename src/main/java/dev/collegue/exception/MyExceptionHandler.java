@@ -27,4 +27,10 @@ public class MyExceptionHandler {
 	    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bodyOfResponse);
 	 }
 	
+	@ExceptionHandler(value = { PasswordModifException.class })
+	protected ResponseEntity<Object> handleConflictPasswordInvalid(RuntimeException ex, WebRequest request) {
+		String bodyOfResponse = "Mot de passe invalide: " + PasswordModifException.message;
+	    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bodyOfResponse);
+	 }
+	
 }
