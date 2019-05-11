@@ -96,7 +96,7 @@ public class AuthentificationCtrl {
 		
 		this.service.modifierMotDePasse(collegue, email);
 		
-		return ResponseEntity.status(HttpStatus.OK).body("La mise à jour a été faite avec succès");
+		return ResponseEntity.status(HttpStatus.OK).build();
 		
 	}
 	
