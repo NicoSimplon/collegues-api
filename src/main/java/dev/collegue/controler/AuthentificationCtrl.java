@@ -25,10 +25,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import dev.collegue.entite.CollegueDTO;
 import dev.collegue.entite.CollegueModifPassword;
 import dev.collegue.entite.InfosAuthentification;
 import dev.collegue.entite.UtilisateurConnecte;
 import dev.collegue.service.CollegueService;
+import dev.collegue.utils.DtoUtils;
 import io.jsonwebtoken.Jwts;
 
 @RestController
@@ -85,6 +87,13 @@ public class AuthentificationCtrl {
 	public UtilisateurConnecte getUserIdentity() {
 		
 		return this.service.getCollegueCo(SecurityContextHolder.getContext().getAuthentication().getName());
+		
+	}
+	
+	@GetMapping(value = "/email")
+	public CollegueDTO getCollegueCo() {
+		
+		return DtoUtils.toCollegueDTO(this.service.rechercheParEmail(SecurityContextHolder.getContext().getAuthentication().getName()));
 		
 	}
 	

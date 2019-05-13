@@ -180,6 +180,18 @@ public class CollegueService {
 		return colRepo.findById(matriculeRecherche).orElseThrow(CollegueNonTrouveException::new);
 
 	}
+	
+	/**
+	 * Recherche un collègue via son email et le retourne
+	 * 
+	 * @param email
+	 * @return Collegue
+	 */
+	public Collegue rechercheParEmail(String email) {
+		
+		return colRepo.findCollegueEmail(email).orElseThrow(CollegueNonTrouveException::new);
+		
+	}
 
 	/**
 	 * Vérifie si un email existe dans la base de données
