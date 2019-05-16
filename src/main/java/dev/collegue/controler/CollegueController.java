@@ -167,7 +167,7 @@ public class CollegueController {
 	@Secured("ROLE_ADMIN")
 	public ResponseEntity<Object> supprimerCommentaire(@PathVariable Integer id) {
 		serviceCom.supprimerCommentaire(id);
-		return ResponseEntity.status(HttpStatus.OK).body("La suppression a été réalisée avec succès");
+		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	
 }
